@@ -14,6 +14,11 @@ WIFI_ON_ICON = "icons/wifi-icon.png"
 WIFI_OFF_ICON = "icons/wifi-off-icon.png"
 
 
+
+
+
+
+
 class ArxivScraper:
     def __init__(self, category: str, date_from: str, date_until: str):
         self.category = category

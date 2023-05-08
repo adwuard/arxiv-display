@@ -45,12 +45,17 @@ class WifiManager:
         if self._callbacks["disconnected"] is not None:
             self._callbacks["disconnected"]()
 
+    def is_connected(self):
+        return self._connected
+    
     def on_connected(self, func):
         # Set the connected callback function
         self._callbacks["connected"] = func
-
+    
     def on_disconnected(self, func):
         # Set the disconnected callback function
         self._callbacks["disconnected"] = func
+
+    
 
 
