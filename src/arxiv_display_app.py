@@ -11,6 +11,18 @@ from views import WifiView
 import signal
 
 
+# import os
+# libdir = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'libs')
+
+# import logging
+# from waveshare_epd import epd4in2
+import epaper
+# print(epaper.modules())
+
+epd = epaper.epaper('epd4in2').EPD()
+epd.init()
+epd.Clear()
+
 class ArxivDisplayApp:
     def __init__(self):
         # Initialize any necessary variables and parameters here
@@ -20,12 +32,12 @@ class ArxivDisplayApp:
         # list of all fetched papers
         self.papers = []
 
-        self.wifi = WifiManager(WIFI_SSID, WIFI_PWD)
+        # self.wifi = WifiManager(WIFI_SSID, WIFI_PWD)
         
         # register callbacks for connection status
-        self.wifi.register_on_connected_cb(self._on_wifi_connected_cb)
-        self.wifi.register_on_disconnected_cb(self._on_wifi_disconnected_cb)
-        self.wifi.register_on_connection_error_cb(self._on_wifi_connection_failed_cb)
+        # self.wifi.register_on_connected_cb(self._on_wifi_connected_cb)
+        # self.wifi.register_on_disconnected_cb(self._on_wifi_disconnected_cb)
+        # self.wifi.register_on_connection_error_cb(self._on_wifi_connection_failed_cb)
 
         driver_factory = DisplayDriverFactory()
         self.screen_driver = driver_factory.create_driver('pygame', 400, 300)
@@ -33,7 +45,7 @@ class ArxivDisplayApp:
         self.WifiView = WifiView(self.screen_driver)
 
         # connect to WIFI
-        self.wifi.connect()
+        # self.wifi.connect()
 
 
     def start(self):
