@@ -1,0 +1,54 @@
+#!/bin/bash
+# Raspberry Pi init start script for a Python script
+
+# Configuration
+PYTHON_SCRIPT_PATH="/path/to/your/python/script.py"
+MAX_RETRIES=5
+
+start() {
+    echo "Starting Python script"
+    local retries=0
+    while [ $retries -lt $MAX_RETRIES ]; do
+        python3 $PYTHON_SCRIPT_PATH "$@" &
+        PID=$!
+        wait $PID
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -eq 0 ]; then
+            break
+        else
+            echo "Python script exited with code $EXIT_CODE, retrying..."
+            retries=$((retries+1))
+        fi
+    done
+    if [ $retries -eq $MAX_RETRIES ]; then
+        echo "Python script failed after $MAX_RETRIES retries, exiting"
+    fi
+}
+
+stop() {
+    echo "Stopping Python script"
+    killall python3
+}
+
+restart() {
+    stop
+    start "$@"
+}
+
+case "$1" in
+    start)
+        start "${@:2}"
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        restart "${@:2}"
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart} [arguments]"
+        exit 1
+        ;;
+esac
+
+exit 0
