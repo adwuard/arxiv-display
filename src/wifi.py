@@ -1,14 +1,14 @@
 import network
 import time
-from machine import Timer
+# from machine import Timer
 
 class WifiManager:
     def __init__(self, ssid, password):
         self._ssid = ssid
         self._password = password
-        self._wifi = network.WLAN(network.STA_IF)
+        # self._wifi = network.WLAN(network.STA_IF)
         self._connected = False
-        self._callbacks = {"connected": None, "disconnected": None}
+        self._callbacks = {"connected": None, "disconnected": None, "error": None}
 
     def connect(self):
         # Connect to the wifi network
@@ -34,8 +34,8 @@ class WifiManager:
                     self._callbacks["connected"]()
         except Exception as e:
             print("Error while connecting to Wi-Fi: ", e)
-            if self._callbacks["disconnected"] is not None:
-                self._callbacks["disconnected"]()
+            if self._callbacks["error"] is not None:
+                self._callbacks["error"](e)
 
     def disconnect(self):
         # Disconnect from the wifi network
@@ -48,13 +48,17 @@ class WifiManager:
     def is_connected(self):
         return self._connected
     
-    def on_connected(self, func):
+    def register_on_connected_cb(self, func):
         # Set the connected callback function
         self._callbacks["connected"] = func
     
-    def on_disconnected(self, func):
+    def register_on_disconnected_cb(self, func):
         # Set the disconnected callback function
         self._callbacks["disconnected"] = func
+    
+    def register_on_connection_error_cb(self, func):
+        # Set the disconnected callback function
+        self._callbacks["error"] = func
 
     
 
